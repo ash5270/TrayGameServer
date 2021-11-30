@@ -125,7 +125,11 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+<<<<<<< Updated upstream
       <AdditionalLibraryDirectories>C:\Users\ash52\Desktop\boost_1_77_0\stage\lib;$(SolutionDir)\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+=======
+      <AdditionalLibraryDirectories>C:\Users\ash52\Desktop\boost_1_77_0\stage\lib;C:\Users\ash52\Desktop\TrayGameServer\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+>>>>>>> Stashed changes
       <AdditionalDependencies>TrayCommon.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
