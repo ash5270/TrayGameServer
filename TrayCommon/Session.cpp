@@ -6,7 +6,7 @@ tray::net::Session::Session(SessionType type, asio::io_context& asioContext,
 	asio::ip::tcp::socket socket, TsQueue<BufferObject>* packets)
 	:m_context(asioContext), m_socket(std::move(socket)), m_currentType(type), m_writeBuffers()
 {
-	Log::Print("Session Create");
+	//	Log::Print("Session Create");
 	asio::ip::tcp::no_delay option(true);
 	m_socket.set_option(option);
 	m_packets = packets;
@@ -26,6 +26,18 @@ bool tray::net::Session::ConnectToClient()
 bool tray::net::Session::ConnectToServer()
 {
 	return false;
+}
+
+void tray::net::Session::Disconnect()
+{
+	//Log::Print("Disconnect");
+	if (m_socket.is_open()) {
+		asio::post(m_context, [this]() {
+			//m_socket.shutdown(asio::ip::tcp::socket::shutdown_both);
+			m_socket.close();
+			});
+	}
+	
 }
 
 void tray::net::Session::ReadData()
@@ -65,12 +77,15 @@ void tray::net::Session::ReadDataCallBack(system::error_code ec, size_t transfer
 			ReadData();
 		}
 	}
+	else {
+		Disconnect();
+	}
 }
 
 void tray::net::Session::SendData()
 {
 	m_writeBuffers.Front(m_writeBuffer);
-	m_socket.async_write_some(asio::buffer(m_writeBuffer.m_data,m_writeBuffer.GetOffset()),
+	m_socket.async_write_some(asio::buffer(m_writeBuffer.m_data, m_writeBuffer.GetOffset()),
 		bind(&Session::SendDataCallBack, shared_from_this(), asio::placeholders::error, asio::placeholders::bytes_transferred));
 }
 
@@ -81,7 +96,7 @@ void tray::net::Session::SendDataCallBack(system::error_code ec, size_t transfer
 	}
 }
 
-void tray::net::Session::Send( Buffer& buffer)
+void tray::net::Session::Send(Buffer& buffer)
 {
 	//test
 	asio::post(m_context, bind(&Session::SendCallBack, shared_from_this(), buffer));

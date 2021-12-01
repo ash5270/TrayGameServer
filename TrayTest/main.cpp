@@ -13,13 +13,13 @@ enum class TestType
 
 class Server:public TrayServer  {
 public:
-	Server(uint16_t port):TrayServer(port)
+	Server(uint16_t port):TrayServer(port)	
 	{
 
 	}
 public:
 	virtual void OnMessage(std::shared_ptr<Session> session, Buffer& buffer) {
-		tray::Log::Print("Data Pop");
+		tray::Log::Print("Data Read");
 	}
 };
 
@@ -36,6 +36,7 @@ int main(){
 	while (1)
 	{
 		server.Update();
+		
 	}
 
 	server.Stop();

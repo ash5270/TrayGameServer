@@ -19,6 +19,9 @@ namespace tray{
 			bool Stop(); 
 			void Update();
 
+			void DisconnectClient(std::shared_ptr<Session> session);
+
+			void SendMsg(std::shared_ptr<Session> session,Buffer& data);
 			void AllSendMsg(Buffer& data);
 
 		public:

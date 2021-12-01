@@ -1,4 +1,5 @@
 #include "TrayServer.h"
+#include<algorithm>
 #include<chrono>
 
 void tray::net::TrayServer::WaitForClientConnection()
@@ -52,14 +53,40 @@ void tray::net::TrayServer::Update()
 			BufferObject data = m_packets->FrontData();
 			OnMessage(data.remote, data.buffer);
 		}
+
+		Buffer buffer;
+		buffer.WriteData(123213);
+		AllSendMsg(buffer);
+	}
+}
+
+void tray::net::TrayServer::SendMsg(std::shared_ptr<Session> session, Buffer& data)
+{
+	if (session->IsConnect()) {
+		session->Send(data);
+	}
+	else {
+		Log::Print("Disconnect");
+		
 	}
 }
 
 void tray::net::TrayServer::AllSendMsg(Buffer& data)
 {
-	for (auto& client : clients) {
-		client->Send(data);
-	}	
+	if (clients.size() > 0) {
+		for (auto& client : clients) {
+			if (client && client->IsConnect()) {
+				client->Send(data);
+				
+				std::this_thread::sleep_for(std::chrono::milliseconds(50));
+			}
+			else {
+				clients.erase(std::remove(clients.begin(), clients.end(), client), clients.end());
+			}
+			Log::Print("client size:: ", clients.size());
+		}
+	}
+	
 }
 
 void tray::net::TrayServer::OnMessage(std::shared_ptr<Session> session, Buffer& buffer)

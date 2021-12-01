@@ -1,2 +1,4 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: 중간 디렉터리(x64\Debug\)에 다른 프로젝트(TrayNetCommon.vcxproj)에서 공유하는 파일이 포함되어 있습니다.  이로 인해 잘못된 정리 및 다시 빌드 동작이 수행될 수 있습니다.
+  TrayServer.cpp
+C:\Users\ash52\Desktop\boost_1_77_0\boost\bind.hpp(41): message : The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
   TrayCommon.vcxproj -> C:\Users\ash52\Desktop\TrayGameServer\x64\Debug\TrayCommon.lib

@@ -19,6 +19,8 @@ namespace tray {
 				asio::ip::tcp::socket,TsQueue<BufferObject>* packets );
 			bool ConnectToClient();
 			bool ConnectToServer();
+
+			void Disconnect();
 			
 			void ReadData();
 			void ReadDataCallBack(system::error_code ec, size_t transferred);
@@ -28,6 +30,10 @@ namespace tray {
 
 			void Send(Buffer& buffer);
 			void SendCallBack(Buffer& buffer);
+
+			bool IsConnect() {
+				return m_socket.is_open();
+			}
 
 		private:
 			asio::io_context& m_context;
