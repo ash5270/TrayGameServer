@@ -21,11 +21,12 @@ namespace tray{
 
 			void DisconnectClient(std::shared_ptr<Session> session);
 
-			void SendMsg(std::shared_ptr<Session> session,Buffer& data);
-			void AllSendMsg(Buffer& data);
+			void SendMsg(std::shared_ptr<Session> session,Buffer&& data);
+			void AllSendMsg(Buffer&& data);
 
 		public:
-			virtual void OnMessage(std::shared_ptr<Session> session, Buffer& buffer);
+			virtual void OnClientConnect(std::shared_ptr<Session> session);
+			virtual void OnMessage(BufferObject&& buffer);
 		protected:
 			asio::io_context m_asioContext;
 			asio::ip::tcp::acceptor m_acceptor;

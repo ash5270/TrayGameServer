@@ -13,7 +13,7 @@ namespace tray {
 			DataBuffer() {
 				body.resize(1024);
 			}
-
+			
 		public:
 			template<typename dataType>
 			void WirteData(const dataType& data) {

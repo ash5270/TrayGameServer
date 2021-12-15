@@ -9,10 +9,16 @@ tray::LogSystem::LogSystem()
 	m_isQueueLoop = false;
 }
 
+tray::LogSystem::~LogSystem()
+{
+	Disable();
+}
+
 void tray::LogSystem::Start()
 {
 	m_isQueueLoop = true;
 	m_logThread = std::thread(&LogSystem::Update, this);
+	ResetColor();
 }
 
 void tray::LogSystem::Disable()
@@ -48,7 +54,7 @@ tray::LogData tray::LogSystem::DataDequeue()
 	return data;
 }
 
-void tray::LogSystem::DataCheck(LogData data) 
+void tray::LogSystem::DataCheck(const LogData data) 
 {
 	switch (data.type)
 	{

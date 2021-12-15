@@ -11,6 +11,7 @@ void tray::net::TrayServer::WaitForClientConnection()
 
 			if (newSession)
 			{
+				OnClientConnect(newSession);
 				clients.push_back(std::move(newSession));
 				clients.back()->ConnectToClient();
 			}
@@ -51,32 +52,33 @@ void tray::net::TrayServer::Update()
 	{
 		if (!m_packets->IsEmpty()) {
 			BufferObject data = m_packets->FrontData();
-			OnMessage(data.remote, data.buffer);
+			OnMessage(std::move(data));
 		}
-
-		Buffer buffer;
-		buffer.WriteData(123213);
-		AllSendMsg(buffer);
-	}
-}
-
-void tray::net::TrayServer::SendMsg(std::shared_ptr<Session> session, Buffer& data)
-{
-	if (session->IsConnect()) {
-		session->Send(data);
-	}
-	else {
-		Log::Print("Disconnect");
 		
 	}
 }
 
-void tray::net::TrayServer::AllSendMsg(Buffer& data)
+void tray::net::TrayServer::DisconnectClient(std::shared_ptr<Session> session)
+{
+
+}
+
+void tray::net::TrayServer::SendMsg(std::shared_ptr<Session> session, Buffer&& data)
+{
+	if (session->IsConnect()) {
+		session->Send(std::move(data));
+	}
+	else {
+		Log::Print("Disconnect");
+	}
+}
+
+void tray::net::TrayServer::AllSendMsg(Buffer&& data)
 {
 	if (clients.size() > 0) {
 		for (auto& client : clients) {
 			if (client && client->IsConnect()) {
-				client->Send(data);
+				client->Send(std::move(data));
 				
 				std::this_thread::sleep_for(std::chrono::milliseconds(50));
 			}
@@ -89,7 +91,12 @@ void tray::net::TrayServer::AllSendMsg(Buffer& data)
 	
 }
 
-void tray::net::TrayServer::OnMessage(std::shared_ptr<Session> session, Buffer& buffer)
+void tray::net::TrayServer::OnClientConnect(std::shared_ptr<Session> session)
+{
+
+}
+
+void tray::net::TrayServer::OnMessage(BufferObject&& buffer)
 {
 
 }

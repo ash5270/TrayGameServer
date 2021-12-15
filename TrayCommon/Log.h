@@ -31,9 +31,11 @@ namespace tray{
 
 		LogType type;
 		std::string m_msg;
+		
 	};
 
-
+	
+	//참조하는법 -> 알아보기
 	class LogSystem {
 	public:
 		static LogSystem& instance() {
@@ -45,6 +47,7 @@ namespace tray{
 		}
 
 		LogSystem();
+		~LogSystem();
 
 	public:
 		enum color : int {
@@ -134,6 +137,22 @@ namespace tray{
 			MakeString(arg);
 			Print(args...);
 		}
+
+
+		template<typename T>
+		static void Print(LogSystem::color color,T arg) {
+			m_logData.type = LogData::LogType::Log;
+			MakeString(arg);
+			m_logSystem.DataEmplace(m_logData);
+			m_logData.clear();
+		}
+
+		template<typename T, typename ... Types>
+		static void Print(LogSystem::color color, T arg, Types... args) {
+			MakeString(arg);
+			Print(color,args...);
+		}
+
 
 	private:
 		//make string 

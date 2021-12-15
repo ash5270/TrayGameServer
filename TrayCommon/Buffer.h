@@ -3,74 +3,175 @@
 
 namespace tray {
 	namespace net {
+
 		class Buffer {
 		public:
-			Buffer() :m_bufferSize(1024) {
-				m_data.resize(m_bufferSize);
-				m_offset = 0;
-				m_readOffset = 0;
-			}
-
-			Buffer(size_t size) : m_bufferSize(size) {
-				m_data.resize(m_bufferSize);
-				m_offset = 0;
-				m_readOffset = 0;
-			}
-
+			const static unsigned int BUFFER_SIZE = 1024;
 		public:
-			template<typename DataType>
-			void WriteData(const DataType& data) {
-				size_t i = m_offset;
-				memcpy_s(m_data.data() + i, sizeof(DataType), &data, sizeof(DataType));
-				m_offset += sizeof(DataType);
+			Buffer()
+				:m_data(new uint8_t[BUFFER_SIZE]),
+				m_capacity(BUFFER_SIZE),
+				m_offset(0){
 			}
 
-			/*bool DataWrite(const std::string& data) {
+			Buffer(size_t size) 
+				:m_data(new uint8_t[size]),
+				m_capacity(size),
+				m_offset(0){}
+			
+			Buffer(const Buffer& buffer)
+				:m_data(new uint8_t[buffer.m_capacity]),
+				m_capacity(buffer.m_capacity),
+				m_offset(buffer.m_offset)
+			{
+				memcpy_s(m_data, m_capacity, buffer.m_data, buffer.m_capacity);
+			}
 
+			Buffer(Buffer&& buffer) noexcept
+				:m_data(buffer.m_data),
+				m_capacity(buffer.m_capacity),
+				m_offset(buffer.m_offset)
+			{
+				buffer.m_data = nullptr;
+				buffer.m_capacity = 0;
+				buffer.m_offset = 0;
+			}
+
+			~Buffer() {
+				delete m_data;
+				m_data = nullptr;
+				m_capacity = 0;
+					m_offset = 0;
+			}
+			
+			
+		public:
+			 size_t Size() const { return m_offset; }
+			 size_t Capacity() const { return m_capacity; }
+
+			/*bool Write(const std::string& data) {
+
+			}*/
+
+			/*template<typename T>
+			bool Write(const T& data) {
+				uint8_t dataSize = sizeof(T);
+				if (m_offset + dataSize > m_capacity) {
+					return false;
+				}
+
+				size_t currentCap = m_capacity - m_offset;
+				memcpy_s(m_data + m_offset, currentCap, &data, dataSize);
+				m_offset += dataSize;
 				return true;
 			}*/
 
-
-			void ReadData(std::string& data) {
-				uint16_t len;
-				memcpy_s(&len, sizeof(uint16_t), m_data.data() + m_readOffset, sizeof(uint16_t));
-
-				m_readOffset += sizeof(uint16_t);
-				data.resize((size_t)len);
-
-				memcpy_s(data.data(), (size_t)len, m_data.data()+ m_readOffset, (size_t)len);
-				m_readOffset += len;
+			bool Write(const uint8_t* data, size_t size) {
+				if (m_offset + size > m_capacity) {
+					return false;
+				}
+				
+				size_t currentCap = m_capacity - m_offset;
+				memcpy_s(m_data + m_offset, currentCap, data, size);
+				m_offset += size;
+				return true;
 			}
 
-			template<typename DataType>
-			void ReadData(DataType& data) {
-				size_t i = m_readOffset;
-				memcpy(&data, m_data.data() + i, sizeof(DataType));
-				m_readOffset += sizeof(DataType);
-
+			void Clear() {
+				m_offset = 0;
+				memset(m_data, 0, m_capacity);
 			}
 
-			size_t GetOffset() {
-				return m_offset;
+			Buffer& operator=(tray::net::Buffer&& buffer) noexcept {
+				m_capacity = buffer.m_capacity;
+				m_offset = buffer.m_offset;
+				m_data = buffer.m_data;
+
+				buffer.m_capacity = 0;
+				buffer.m_offset = 0;
+				buffer.m_data = nullptr;
+				return *this;
+			}
+
+			Buffer& operator=(tray::net::Buffer& buffer) {
+				m_capacity = buffer.m_capacity;
+				m_offset = buffer.m_offset;
+				
+				memcpy_s(m_data, m_capacity, buffer.m_data, buffer.m_capacity);
+				return *this;
 			}
 
 		public:
-			void Clear() {
-				memset(m_data.data(), 0, m_bufferSize);
-				m_offset = 0;
-				m_readOffset = 0;
+			uint8_t* GetBuffer() const {
+				return m_data;
 			}
 
-			size_t GetBufferSize() {
-				return m_bufferSize;
+			void SetOffset(size_t size) {
+				m_offset = size;	
 			}
-			std::vector<uint8_t> m_data;
+
+			size_t GetOffset() const {
+				return m_offset;
+			}
+
 		private:
+			uint8_t* m_data;
+			
+			size_t m_capacity;
+			size_t m_offset;
 
-			std::size_t m_offset;
-			std::size_t m_readOffset;
+		};
 
-			std::size_t m_bufferSize;
+
+		static class BufferReader {
+		public:
+			//16bit int return
+			static uint16_t ReadInt16(Buffer& buffer,size_t& offset) {
+				size_t size = sizeof(uint16_t);
+				uint16_t data = 0;	
+				memcpy_s(&data, size, buffer.GetBuffer() + offset, size);
+				offset += size;
+				return data;
+			}
+
+			//string return
+			static std::string ReadString(Buffer& buffer, size_t& offset, const size_t& size) {
+				char* data = new char[size+1];
+				memset(data, 0, size + 1);
+				memcpy_s(data, size, buffer.GetBuffer()+offset, size);
+				offset += size;
+				std::string msg(std::move(data));
+				
+				return msg;
+			}
+
+			//32bit int return
+			static uint32_t ReadInt32(Buffer& buffer, size_t& offset) {
+				size_t size = sizeof(uint32_t);
+				uint32_t data = 0;
+				memcpy_s(&data, size, buffer.GetBuffer() + offset, size);
+				offset += size;
+				return data;
+			}
+
+			//float return
+			static float ReadFloat(Buffer& buffer, size_t& offset) {
+				size_t size = sizeof(float);
+				float data = 0;
+				memcpy_s(&data, size, buffer.GetBuffer() + offset, size);
+
+				offset += size;
+				return data;
+			}
+
+			//double return
+			static double ReadDouble(Buffer& buffer,  size_t& offset) {
+				size_t size = sizeof(double);
+				double data = 0;
+				memcpy_s(&data, size, buffer.GetBuffer() + offset, size);
+				offset += size;
+				return data;
+			}
 		};
 	}
 }

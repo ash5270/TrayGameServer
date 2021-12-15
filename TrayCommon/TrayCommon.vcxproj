@@ -24,6 +24,7 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="NetBuffer.h" />
     <ClInclude Include="NetMessage.h" />
+    <ClInclude Include="Serializer.h" />
     <ClInclude Include="Session.h" />
     <ClInclude Include="TrayClient.h" />
     <ClInclude Include="TrayCommon.h" />

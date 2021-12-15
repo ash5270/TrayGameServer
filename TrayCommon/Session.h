@@ -4,7 +4,7 @@
 #include"BufferQueue.h"
 using namespace boost;
 
-namespace tray {
+namespace tray{ 
 	namespace net {
 		class Session : public std::enable_shared_from_this<Session> {
 		public:
@@ -28,8 +28,8 @@ namespace tray {
 			void SendData();
 			void SendDataCallBack(system::error_code ec, size_t transferred);
 
-			void Send(Buffer& buffer);
-			void SendCallBack(Buffer& buffer);
+			void Send(Buffer&& buffer);
+	
 
 			bool IsConnect() {
 				return m_socket.is_open();

@@ -45,6 +45,9 @@
     <ClInclude Include="TrayCommon.h">
       <Filter>헤더 파일\Common</Filter>
     </ClInclude>
+    <ClInclude Include="Serializer.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TrayClient.cpp">
