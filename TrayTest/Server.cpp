@@ -1,35 +1,37 @@
 #include "Server.h"
 
+#include "PingPacket.h"
+
 Server::Server(uint16_t port) :tray::net::TrayServer(port)
 {
+
 }
 
 void Server::OnMessage(tray::net::BufferObject&& buffer)
 {
-	tray::Log::Print("Read Data");
-	//PacketID id;
-	//uint16_t size;
-	int data;
-	size_t offset=0;
-	uint16_t id = tray::net::BufferReader::ReadInt16(buffer.buffer,offset);
-	uint16_t size = tray::net::BufferReader::ReadInt16(buffer.buffer, offset);
-	uint16_t userSize = tray::net::BufferReader::ReadInt16(buffer.buffer, offset);
-	std::string userName = tray::net::BufferReader::ReadString(buffer.buffer, offset, userSize);
-	uint16_t msgSize = tray::net::BufferReader::ReadInt16(buffer.buffer, offset);
-	std::string msg = tray::net::BufferReader::ReadString(buffer.buffer, offset, userSize);
+	const PacketID packet_id = id_serializer.GetID(&buffer.buffer);
+	uint16_t size = id_serializer.GetSize(&buffer.buffer);
 
-	tray::Log::Print("id: ",id," size: ",size, "user:", userName, " msg: ",msg  , "\n");
-	
+	if( packet_id == PacketID::Message)
+	{
+		MessagePacket message_packet;
+		message_packet.SetBuffer(&buffer.buffer);
+		tray::Log::Print("Read Data");
+		auto msg_data = message_packet.GetData();
 
-	tray::net::Buffer buffer2;
-	int data2 = 1200;
-	uint16_t size2 = sizeof(data2);
+		tray::Log::Print(" id: ", msg_data.user_id, " msg_size:", msg_data.message);
 
-
-
-	//if (id == PacketID::message) {
-		buffer.remote->Send(std::move(buffer2));
-	//}
+		auto send_buffer = message_packet.Serialize(msg_data);
+		buffer.remote->Send(std::move(send_buffer));
+	}
+	else if(packet_id==PacketID::Ping)
+	{
+		tray::Log::Print("Receive Ping");
+		PingPacket ping_packet;
+		PingData ping;
+		auto send_buffer = ping_packet.Serialize(ping);
+		buffer.remote->Send(std::move(send_buffer));
+	}
 }
 
 void Server::OnClientConnect(std::shared_ptr<tray::net::Session> session)
@@ -37,8 +39,4 @@ void Server::OnClientConnect(std::shared_ptr<tray::net::Session> session)
 	tray::net::Buffer buffer;
 	int data = 1200;
 	uint16_t size = sizeof(data);
-
-	
-	
-	//SendMsg(session, std::move(buffer));
 }

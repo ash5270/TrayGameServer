@@ -1,12 +1,14 @@
 ﻿  Application.cpp
 C:\Users\ash52\Desktop\boost_1_77_0\boost\bind.hpp(41): message : The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
-C:\Users\ash52\Desktop\TrayGameServer\TrayCommon\Buffer.h(263,4): warning C4091: 'static ': 변수를 선언하지 않으면 'tray::net::BufferReader' 왼쪽은 무시됩니다.
+  MessagePacket.cpp
+C:\Users\ash52\Desktop\boost_1_77_0\boost\bind.hpp(41): message : The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
+  PacketIDSerializer.cpp
+C:\Users\ash52\Desktop\boost_1_77_0\boost\bind.hpp(41): message : The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
+  PingPacket.cpp
+C:\Users\ash52\Desktop\boost_1_77_0\boost\bind.hpp(41): message : The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
   Server.cpp
 C:\Users\ash52\Desktop\boost_1_77_0\boost\bind.hpp(41): message : The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
-C:\Users\ash52\Desktop\TrayGameServer\TrayCommon\Buffer.h(263,4): warning C4091: 'static ': 변수를 선언하지 않으면 'tray::net::BufferReader' 왼쪽은 무시됩니다.
-C:\Users\ash52\Desktop\TrayGameServer\TrayTest\Server.cpp(12,6): warning C4101: 'data' :참조되지 않은 지역 변수입니다.
   main.cpp
 C:\Users\ash52\Desktop\boost_1_77_0\boost\bind.hpp(41): message : The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated. Please use <boost/bind/bind.hpp> + using namespace boost::placeholders, or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
-C:\Users\ash52\Desktop\TrayGameServer\TrayCommon\Buffer.h(263,4): warning C4091: 'static ': 변수를 선언하지 않으면 'tray::net::BufferReader' 왼쪽은 무시됩니다.
   코드를 생성하고 있습니다...
   TrayTest.vcxproj -> C:\Users\ash52\Desktop\TrayGameServer\x64\Debug\TrayTest.exe

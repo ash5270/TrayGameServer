@@ -2,11 +2,9 @@
 #include<TrayCommon.h>
 #include<TrayServer.h>
 #include<Buffer.h>
-
-
-enum class PacketID : uint16_t {
-	message=0,
-};
+#include"PacketIData.h"
+#include"MessagePacket.h"
+#include"PacketIDSerializer.h"
 
 class Server :public tray::net::TrayServer {
 public:
@@ -14,4 +12,8 @@ public:
 public:
 	virtual void OnMessage( tray::net::BufferObject&& buffer);
 	virtual void OnClientConnect(std::shared_ptr<tray::net::Session> session);
+
+public:
+	PacketIDSerializer id_serializer;
+
 };

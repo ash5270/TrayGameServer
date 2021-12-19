@@ -6,7 +6,7 @@ namespace tray {
 
 		class Buffer {
 		public:
-			const static unsigned int BUFFER_SIZE = 1024;
+			constexpr static unsigned int BUFFER_SIZE = 1024;
 		public:
 			Buffer()
 				:m_data(new uint8_t[BUFFER_SIZE]),
@@ -35,43 +35,35 @@ namespace tray {
 				buffer.m_data = nullptr;
 				buffer.m_capacity = 0;
 				buffer.m_offset = 0;
-			}
+			}		
 
 			~Buffer() {
-				delete m_data;
-				m_data = nullptr;
-				m_capacity = 0;
-					m_offset = 0;
+				try
+				{
+					if (m_data != nullptr)
+					{
+						delete[] m_data;
+						m_data = nullptr;
+						m_capacity = 0;
+						m_offset = 0;
+					}
+				}
+				catch (std::exception ex)
+				{
+					Log::Print(ex.what());
+				}
 			}
 			
-			
 		public:
-			 size_t Size() const { return m_offset; }
-			 size_t Capacity() const { return m_capacity; }
+			size_t Size() const { return m_offset; }
+			size_t Capacity() const { return m_capacity; }
 
-			/*bool Write(const std::string& data) {
-
-			}*/
-
-			/*template<typename T>
-			bool Write(const T& data) {
-				uint8_t dataSize = sizeof(T);
-				if (m_offset + dataSize > m_capacity) {
-					return false;
-				}
-
-				size_t currentCap = m_capacity - m_offset;
-				memcpy_s(m_data + m_offset, currentCap, &data, dataSize);
-				m_offset += dataSize;
-				return true;
-			}*/
-
-			bool Write(const uint8_t* data, size_t size) {
+			bool Write(const void* data, size_t size) {
 				if (m_offset + size > m_capacity) {
 					return false;
 				}
 				
-				size_t currentCap = m_capacity - m_offset;
+				const size_t currentCap = m_capacity - m_offset;
 				memcpy_s(m_data + m_offset, currentCap, data, size);
 				m_offset += size;
 				return true;
@@ -119,59 +111,6 @@ namespace tray {
 			
 			size_t m_capacity;
 			size_t m_offset;
-
-		};
-
-
-		static class BufferReader {
-		public:
-			//16bit int return
-			static uint16_t ReadInt16(Buffer& buffer,size_t& offset) {
-				size_t size = sizeof(uint16_t);
-				uint16_t data = 0;	
-				memcpy_s(&data, size, buffer.GetBuffer() + offset, size);
-				offset += size;
-				return data;
-			}
-
-			//string return
-			static std::string ReadString(Buffer& buffer, size_t& offset, const size_t& size) {
-				char* data = new char[size+1];
-				memset(data, 0, size + 1);
-				memcpy_s(data, size, buffer.GetBuffer()+offset, size);
-				offset += size;
-				std::string msg(std::move(data));
-				
-				return msg;
-			}
-
-			//32bit int return
-			static uint32_t ReadInt32(Buffer& buffer, size_t& offset) {
-				size_t size = sizeof(uint32_t);
-				uint32_t data = 0;
-				memcpy_s(&data, size, buffer.GetBuffer() + offset, size);
-				offset += size;
-				return data;
-			}
-
-			//float return
-			static float ReadFloat(Buffer& buffer, size_t& offset) {
-				size_t size = sizeof(float);
-				float data = 0;
-				memcpy_s(&data, size, buffer.GetBuffer() + offset, size);
-
-				offset += size;
-				return data;
-			}
-
-			//double return
-			static double ReadDouble(Buffer& buffer,  size_t& offset) {
-				size_t size = sizeof(double);
-				double data = 0;
-				memcpy_s(&data, size, buffer.GetBuffer() + offset, size);
-				offset += size;
-				return data;
-			}
 		};
 	}
 }
