@@ -147,18 +147,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="LoginModule.cpp" />
+    <ClCompile Include="LoginPacket.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessagePacket.cpp" />
     <ClCompile Include="PacketIDSerializer.cpp" />
     <ClCompile Include="PingPacket.cpp" />
+    <ClCompile Include="PositionModule.cpp" />
+    <ClCompile Include="PosPacket.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="LoginModule.h" />
+    <ClInclude Include="LoginPacket.h" />
     <ClInclude Include="MessagePacket.h" />
     <ClInclude Include="PacketIData.h" />
     <ClInclude Include="PacketIDSerializer.h" />
     <ClInclude Include="PingPacket.h" />
+    <ClInclude Include="PositionModule.h" />
+    <ClInclude Include="PosPacket.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

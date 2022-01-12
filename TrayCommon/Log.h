@@ -163,6 +163,11 @@ namespace tray{
 		static void MakeString(char* data) {
 			m_logData.m_msg += std::string(data);
 		}
+
+		static void MakeString(float data)
+		{
+			m_logData.m_msg += std::to_string(data);
+		}
 		
 		template<typename T,std::enable_if_t<std::is_integral<T>::value,int> = 0 >
 		static void MakeString(const T  data) {

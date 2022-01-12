@@ -1,7 +1,8 @@
 #include "Application.h"
 
-Application::Application() : server(3000)
+Application::Application() 
 {
+	server = std::make_shared<Server>(3000);
 }
 
 Application::~Application()
@@ -15,20 +16,29 @@ void Application::Awake()
 
 void Application::Start()
 {
-	server.Start();
+	server->Start();
+
+	position_module = new PositionModule(server);
+	login_module = new LoginModule(server);
+
+	server->packet_divide.insert(std::make_pair(PacketID::Position,
+		[this](tray::net::BufferObject&& buffer) {position_module->GetPacketData(std::move(buffer)); }));
+	server->packet_divide.insert(std::make_pair(PacketID::Login,
+		[this](tray::net::BufferObject&& buffer) {login_module->GetPacketData(std::move(buffer)); }));
+
 }
 
 void Application::Update()
 {
-	while (1)
+	while (true)
 	{
-		server.Update();
+		server->Update();
 	}
 }
 
 void Application::End()
 {
-	server.Stop();
+	server->Stop();
 }
 
 void Application::Exit()

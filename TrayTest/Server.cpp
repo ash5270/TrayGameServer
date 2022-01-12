@@ -9,28 +9,17 @@ Server::Server(uint16_t port) :tray::net::TrayServer(port)
 
 void Server::OnMessage(tray::net::BufferObject&& buffer)
 {
-	const PacketID packet_id = id_serializer.GetID(&buffer.buffer);
-	uint16_t size = id_serializer.GetSize(&buffer.buffer);
+	const PacketID packet_id = id_serializer.GetID(buffer.buffer);
+	//uint16_t size = id_serializer.GetSize(&buffer.buffer);
 
-	if( packet_id == PacketID::Message)
+	//packet_divide[packet_id](std::move(buffer));
+	const auto packet_func = packet_divide.find(packet_id);
+	if(packet_func!=packet_divide.end())
 	{
-		MessagePacket message_packet;
-		message_packet.SetBuffer(&buffer.buffer);
-		tray::Log::Print("Read Data");
-		auto msg_data = message_packet.GetData();
-
-		tray::Log::Print(" id: ", msg_data.user_id, " msg_size:", msg_data.message);
-
-		auto send_buffer = message_packet.Serialize(msg_data);
-		buffer.remote->Send(std::move(send_buffer));
-	}
-	else if(packet_id==PacketID::Ping)
+		packet_func->second(std::move(buffer));
+	}else
 	{
-		tray::Log::Print("Receive Ping");
-		PingPacket ping_packet;
-		PingData ping;
-		auto send_buffer = ping_packet.Serialize(ping);
-		buffer.remote->Send(std::move(send_buffer));
+		tray::Log::Error("Not found packet id:: ", static_cast<uint16_t>(packet_id));
 	}
 }
 
@@ -38,5 +27,5 @@ void Server::OnClientConnect(std::shared_ptr<tray::net::Session> session)
 {
 	tray::net::Buffer buffer;
 	int data = 1200;
-	uint16_t size = sizeof(data);
+	uint16_t size = sizeof(data);	
 }

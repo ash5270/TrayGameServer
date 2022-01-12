@@ -1,6 +1,8 @@
 #pragma once
 
 #include"Server.h"
+#include"PositionModule.h"
+#include"LoginModule.h"
 
 class Application
 {
@@ -17,7 +19,10 @@ public:
 	void Run();
 
 private:
-	Server server;
+	std::shared_ptr<Server> server;
 
+	PositionModule* position_module;
+	LoginModule* login_module;
+	
 };
 

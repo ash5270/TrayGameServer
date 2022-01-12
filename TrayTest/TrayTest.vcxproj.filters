@@ -12,6 +12,9 @@
     <Filter Include="Packet">
       <UniqueIdentifier>{a2ff8fff-afce-4125-84e3-2acf8c24e6f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Packet\Serializer">
+      <UniqueIdentifier>{e7dec0d8-298b-4f9b-80c2-185f0a39b12a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -23,14 +26,26 @@
     <ClCompile Include="Server.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="MessagePacket.cpp">
+    <ClCompile Include="PingPacket.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PositionModule.cpp">
       <Filter>Packet</Filter>
     </ClCompile>
     <ClCompile Include="PacketIDSerializer.cpp">
-      <Filter>Packet</Filter>
+      <Filter>Packet\Serializer</Filter>
     </ClCompile>
-    <ClCompile Include="PingPacket.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="MessagePacket.cpp">
+      <Filter>Packet\Serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="PosPacket.cpp">
+      <Filter>Packet\Serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginPacket.cpp">
+      <Filter>Packet\Serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginModule.cpp">
+      <Filter>Packet</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -40,17 +55,29 @@
     <ClInclude Include="Server.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="PacketIDSerializer.h">
-      <Filter>Packet</Filter>
-    </ClInclude>
     <ClInclude Include="PacketIData.h">
-      <Filter>Packet</Filter>
-    </ClInclude>
-    <ClInclude Include="MessagePacket.h">
       <Filter>Packet</Filter>
     </ClInclude>
     <ClInclude Include="PingPacket.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PositionModule.h">
+      <Filter>Packet</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketIDSerializer.h">
+      <Filter>Packet\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="MessagePacket.h">
+      <Filter>Packet\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="PosPacket.h">
+      <Filter>Packet\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginPacket.h">
+      <Filter>Packet\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginModule.h">
+      <Filter>Packet</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

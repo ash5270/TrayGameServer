@@ -24,7 +24,7 @@ public:
 			return result;
 		}
 
-		bool MsgDeSerialize(tray::net::Buffer& msg_buffer, MessageData& msg_packet)
+		bool MsgDeSerialize(const tray::net::Buffer& msg_buffer, MessageData& msg_packet)
 		{
 			size_t offset = 4;
 			bool result = DeSerialize(msg_buffer, offset, msg_packet.user_id_length);
